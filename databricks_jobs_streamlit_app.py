@@ -88,6 +88,22 @@ def cleanup_jobs(names_to_clean):
 
 st.set_page_config(page_title="Databricks Manager", page_icon="🚀", layout="wide")
 
+if "autenticado" not in st.session_state:
+    st.session_state.autenticado = False
+
+if not st.session_state.autenticado:
+    st.subheader("🔐 Acesso Restrito")
+    token_input = st.text_input("Insere o teu Databricks Token para aceder:", type="password")
+    
+    if st.button("Entrar"):
+        # Validação simples: verificar se o token inserido é igual ao que está nos Secrets
+        if token_input == DB_TOKEN:
+            st.session_state.autenticado = True
+            st.rerun() # Atualiza a página para mostrar o conteúdo
+        else:
+            st.error("Token inválido. Acesso negado.")
+    st.stop() # Bloqueia a execução do resto do código aqui
+
 st.title("🚀 Databricks Manager")
 st.caption("Versão Simplificada & Segura (Single App)")
 
